@@ -8,7 +8,7 @@ import io.reactivex.Single
 class MovieApiManager(moviesService: MoviesService, applicationContext: Context
 ) : BaseApiManager<MoviesService>(moviesService, applicationContext){
 
-    fun getNowPlayingMovies(page: Int): Single<List<MovieModel>> {
+    fun getNowPlayingMovies(page: Int?): Single<List<MovieModel>> {
         return getExecutorSingle().flatMap {
             it.getNowPlayingMovies(page)
         }.map { it.nowPlayingMovies }

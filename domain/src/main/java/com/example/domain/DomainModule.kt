@@ -1,18 +1,19 @@
 package com.example.domain
 
 import com.example.data.DataModule
-import com.example.data.repository.NowPlayingRepository
+import com.example.domain.usecase.NowPlayingUseCase
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
 
-val repoModule = module {
-    single { NowPlayingRepository() }
+val useCaseModule = module {
+    single { NowPlayingUseCase(get()) }
 }
+
 
 object DomainModule {
 
     fun start() {
         DataModule.start()
-        loadKoinModules(repoModule)
+        loadKoinModules(useCaseModule)
     }
 }

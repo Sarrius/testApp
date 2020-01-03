@@ -43,3 +43,6 @@ dependencies {
     kapt deps.glide.compiler
 
 }
+repositories {
+    mavenCentral()
+}

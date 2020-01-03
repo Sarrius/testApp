@@ -30,6 +30,7 @@ dependencies {
 
     api deps.kotlin.stdlib
     api deps.timber.runtime
+
     api deps.support.vAppCompatv7
     api deps.support.coreKtx
     api deps.support.annotations
@@ -37,6 +38,7 @@ dependencies {
     api deps.room.rxJava
     api deps.rx.kotlin
     api deps.rx.android
+
     api deps.koin.runtime
     api deps.koin.scope
 
@@ -48,4 +50,7 @@ dependencies {
 
     api deps.glide.runtime
     kapt deps.glide.compiler
+}
+repositories {
+    mavenCentral()
 }

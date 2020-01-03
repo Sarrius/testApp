@@ -42,3 +42,6 @@ dependencies {
     implementation deps.paging.runtime
     implementation deps.paging.rx
 }
+repositories {
+    mavenCentral()
+}

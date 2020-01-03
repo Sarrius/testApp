@@ -10,11 +10,11 @@ val databaseModule = module {
 }
 
 val apiSourcesModule = module {
-    single { DbManager.getRoom(get(), "MoviesDb") }//TODO hardcoded DB name
+    single { }
 }
 
 val dbSourcesModule = module {
-    single { DbManager.getRoom(get(), "MoviesDb") }//TODO hardcoded DB name
+    single {  }
 }
 
 

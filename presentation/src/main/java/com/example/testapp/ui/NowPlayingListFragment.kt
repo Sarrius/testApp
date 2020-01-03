@@ -8,13 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testapp.R
-import com.example.testapp.ui.vidgets.NowPlayingDiffUtil
 import com.example.testapp.ui.vidgets.NowPlayingPagedListAdapter
+import com.example.testapp.ui.vidgets.NowPlayingPosterDiffUtil
 import com.example.testapp.ui.viewmodel.NowPlayingViewModel
 import kotlinx.android.synthetic.main.fragment_now_playing_list.*
 import org.koin.android.ext.android.inject
 
-class NowPlayingListFragment: Fragment(), View.OnClickListener {
+class NowPlayingListFragment : Fragment(), View.OnClickListener {
 
     private val nowPlayingViewModel: NowPlayingViewModel by inject()
     private lateinit var nowPlayingPagedListAdapter: NowPlayingPagedListAdapter
@@ -39,16 +39,18 @@ class NowPlayingListFragment: Fragment(), View.OnClickListener {
     }
 
     private fun initList() {
-         nowPlayingPagedListAdapter = NowPlayingPagedListAdapter(
-             NowPlayingDiffUtil(),
-             this)
+        nowPlayingPagedListAdapter = NowPlayingPagedListAdapter(
+            NowPlayingPosterDiffUtil(),
+            this
+        )
 
         rv_now_playing.adapter = nowPlayingPagedListAdapter
         rv_now_playing.layoutManager = GridLayoutManager(
             context,
             2,
             RecyclerView.VERTICAL,
-            false)
+            false
+        )
     }
 
     override fun onClick(v: View?) {

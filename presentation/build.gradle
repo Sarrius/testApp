@@ -39,6 +39,8 @@ dependencies {
     implementation deps.koin.runtime
     implementation deps.koin.viewModel
 
+    implementation deps.support.cardView
+
     implementation deps.glide.runtime
     kapt deps.glide.compiler
 

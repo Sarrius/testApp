@@ -20,9 +20,6 @@ abstract class NowPlayingDao {
     @Query("SELECT COUNT(*) FROM MovieDbModel")
     abstract fun getNextIndexInNowPlaying(): Int
 
-    @Query("SELECT COUNT(*) FROM MovieDbModel")
-    abstract fun getNextPageInNowPlaying(page: Int): Int
-
     @Query("DELETE FROM MovieDbModel")
     abstract fun removeAllNowPlaying()
 

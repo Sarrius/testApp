@@ -16,17 +16,16 @@ class NowPlayingRepository(
     private val nowPlayingDbDataSource: NowPlayingDbDataSource
 ) : BaseRepo(), BoundaryCallbackListener {
 
-
-    override fun requestInitialData() {
-        getApiObservable(null, true)
+    override fun requestInitialData(): Single<Unit> {
+        return getPagingSingle(null, true)
     }
 
-    override fun refresh() {
-        getApiObservable(null, true)
+    override fun refresh(): Single<Unit> {
+        return getPagingSingle(null, true)
     }
 
-    fun getNowPlayingPaged(page: Int?) {
-        getApiObservable(page, false)
+    fun getNowPlayingPaged(page: Int?): Single<Unit> {
+       return getPagingSingle(page, false)
     }
 
     fun getNowPlayingById(id: Int) {
@@ -43,15 +42,15 @@ class NowPlayingRepository(
     }
 
     override fun onZeroLoaded() {
-        getApiObservable(null, false)
+        getPagingSingle(null, false)
     }
 
     override fun onItemAtEndLoaded(itemAtEnd: NowPlayingPosterModel) {
         //TODO implement page
-        getApiObservable(itemAtEnd.page, false)
+        getPagingSingle(itemAtEnd.page, false)
     }
 
-    private fun getApiObservable(page: Int?, rewrite: Boolean): Single<Unit> {
+    private fun getPagingSingle(page: Int?, rewrite: Boolean): Single<Unit> {
         return nowPlayingApiDataSource.getNowPlaying(page)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())

@@ -13,7 +13,7 @@ val useCaseModule = module {
 object DomainModule {
 
     fun start() {
-        DataModule.start()
         loadKoinModules(useCaseModule)
+        DataModule.start()
     }
 }

@@ -1,21 +1,20 @@
 package com.example.testapp.ui.vidgets
 
 import android.view.View
-import androidx.annotation.IdRes
-import androidx.recyclerview.widget.RecyclerView
+import android.widget.ImageView
+import com.example.common.utils.loadImage
+import com.example.domain.entity.NowPlayingPosterModel
+import com.example.testapp.R
 
-class NowPlayingViewHolder(itemView: View, private val onclickListener: View.OnClickListener): RecyclerView.ViewHolder(itemView){
+class NowPlayingViewHolder(
+    itemView: View,
+    onclickListener: View.OnClickListener
+): BasePagingViewHolder<NowPlayingPosterModel>(itemView, onclickListener){
 
-    @Suppress("UNCHECKED_CAST")
-    fun <T : View> bindLazy(@IdRes res: Int): T {
-        val view by lazy { itemView.findViewById<T>(res) }
-        return view
-    }
+    val poster: ImageView = bindLazy(R.id.iv_poster)
 
-    fun bind(any: Any?){
-        itemView.setOnClickListener {
-            //TODO set view id
-            onclickListener.onClick(it)
-        }
+    override fun bindItem(item: NowPlayingPosterModel?) {
+        super.bindItem(item)
+        poster.loadImage(item?.posterPath, R.drawable.ic_no_image)
     }
 }

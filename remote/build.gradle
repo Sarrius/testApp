@@ -29,6 +29,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(path: ':common')
 
+    implementation deps.retrofit.logger
+
 }
 repositories {
     mavenCentral()

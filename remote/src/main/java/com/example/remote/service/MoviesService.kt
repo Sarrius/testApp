@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface MoviesService {
-    @GET("/movie/now_playing")
+    @GET("movie/now_playing")
     fun getNowPlayingMovies(
         @Query("page") page: Int?
     ): Single<NowPlayingResponse>

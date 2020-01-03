@@ -9,10 +9,10 @@ class QueryParamInterceptor(private val queryParams: HashMap<String, String>) : 
         val original = chain.request()
         val originalHttpUrl = original.url()
 
-        val buildr = originalHttpUrl.newBuilder()
+        var buildr = originalHttpUrl.newBuilder()
 
         queryParams.map {
-            buildr.addQueryParameter(it.key, it.value)
+            buildr = buildr.addQueryParameter(it.key, it.value)
         }
 
         val requestBuilder = original.newBuilder()

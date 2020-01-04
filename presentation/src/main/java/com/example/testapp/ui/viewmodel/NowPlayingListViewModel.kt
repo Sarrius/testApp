@@ -3,26 +3,26 @@ package com.example.testapp.ui.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.domain.entity.NetworkState
-import com.example.domain.usecase.NowPlayingUseCase
+import com.example.domain.usecase.NowPlayingListUseCase
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
-class NowPlayingViewModel : ViewModel(), KoinComponent{
+class NowPlayingListViewModel : ViewModel(), KoinComponent{
 
 
-    private val nowPlayingUseCase: NowPlayingUseCase by inject()
+    private val nowPlayingListUseCase: NowPlayingListUseCase by inject()
 
     val refreshLiveDataState = MutableLiveData<NetworkState>()
     val initialLiveDataState = MutableLiveData<NetworkState>()
 
-    val pagedListLiveData = nowPlayingUseCase.requestListData()
+    val pagedListLiveData = nowPlayingListUseCase.requestListData()
 
     fun requestInitialData() {
-        nowPlayingUseCase.getNowPlayingPaged(null, initialLiveDataState)
+        nowPlayingListUseCase.getNowPlayingPaged(null, initialLiveDataState)
     }
 
     fun refresh(){
-        nowPlayingUseCase.refresh(refreshLiveDataState)
+        nowPlayingListUseCase.refresh(refreshLiveDataState)
     }
 
 }

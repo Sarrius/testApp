@@ -6,31 +6,29 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.example.data.repository.NowPlayingRepository
 import com.example.domain.entity.NetworkState
-import com.example.domain.entity.NowPlayingPosterModel
+import com.example.domain.entity.NowPlayingMovieModel
+import com.example.domain.usecase.boundary.BoundaryCallbackListener
+import com.example.domain.usecase.boundary.NowPlayingBoundaryCallback
 import io.reactivex.rxkotlin.addTo
 import mapToEntity
 
-class NowPlayingUseCase(
+class NowPlayingListUseCase(
     private val nowPlayingRepository: NowPlayingRepository
 ): BaseUseCase(nowPlayingRepository), BoundaryCallbackListener {
 
-    override fun refresh(networkState: MutableLiveData<NetworkState>){
+    fun refresh(networkState: MutableLiveData<NetworkState>){
         nowPlayingRepository.refresh()
-            .handleState(networkState)
+            .handleNetworkState(networkState)
             .addTo(compositeDisposable)
     }
 
     fun getNowPlayingPaged(page: Int?, networkState: MutableLiveData<NetworkState>){
         nowPlayingRepository.getNowPlayingPaged(page)
-            .handleState(networkState)
+            .handleNetworkState(networkState)
             .addTo(compositeDisposable)
     }
 
-    fun getNowPlayingById(id: Int){
-        nowPlayingRepository.getNowPlayingById(id)
-    }
-
-    fun requestListData(): LiveData<PagedList<NowPlayingPosterModel>> {
+    fun requestListData(): LiveData<PagedList<NowPlayingMovieModel>> {
         return LivePagedListBuilder(
             nowPlayingRepository.requestListData().map { it.mapToEntity() }
             , 20
@@ -42,9 +40,9 @@ class NowPlayingUseCase(
 
     }
 
-    override fun onItemAtEndLoaded(itemAtEnd: NowPlayingPosterModel) {
+    override fun onItemAtEndLoaded(itemAtEnd: NowPlayingMovieModel) {
         nowPlayingRepository.getNowPlayingPaged(itemAtEnd.nextPage)
-            .handleState(null)
+            .handleNetworkState(null)
             .addTo(compositeDisposable)
     }
 }

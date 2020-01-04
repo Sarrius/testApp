@@ -1,17 +1,17 @@
 package com.example.testapp.ui.vidgets
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.domain.entity.NowPlayingPosterExtendedModel
+import com.example.domain.entity.NowPlayingMovieExtendedModel
 
-class NowPlayingDiffUtil: DiffUtil.ItemCallback<NowPlayingPosterExtendedModel>(){
-    override fun areItemsTheSame(oldItem: NowPlayingPosterExtendedModel,
-                                 newItem: NowPlayingPosterExtendedModel
+class NowPlayingDiffUtil: DiffUtil.ItemCallback<NowPlayingMovieExtendedModel>(){
+    override fun areItemsTheSame(oldItem: NowPlayingMovieExtendedModel,
+                                 newItem: NowPlayingMovieExtendedModel
     ): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: NowPlayingPosterExtendedModel,
-                                    newItem: NowPlayingPosterExtendedModel
+    override fun areContentsTheSame(oldItem: NowPlayingMovieExtendedModel,
+                                    newItem: NowPlayingMovieExtendedModel
     ): Boolean {
         val overview = oldItem.overview ==newItem.overview
         val popularity = oldItem.popularity ==newItem.popularity

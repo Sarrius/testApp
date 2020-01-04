@@ -11,8 +11,6 @@ open abstract class BaseUseCase(private vararg val repos: BaseRepo) {
 
     protected val compositeDisposable = CompositeDisposable()
 
-    abstract fun refresh(networkState: MutableLiveData<NetworkState>)
-
     fun dispose() {
         if (!compositeDisposable.isDisposed) {
             compositeDisposable.dispose()
@@ -20,7 +18,7 @@ open abstract class BaseUseCase(private vararg val repos: BaseRepo) {
     }
 }
 
-fun <T> Single<T>.handleState(networkState: MutableLiveData<NetworkState>?): Disposable {
+fun <T> Single<T>.handleNetworkState(networkState: MutableLiveData<NetworkState>?): Disposable {
     return this.subscribe({
         networkState?.postValue(NetworkState.SUCCESS)
     }, {

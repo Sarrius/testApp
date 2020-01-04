@@ -12,19 +12,19 @@ import com.example.domain.entity.Status
 import com.example.testapp.R
 import com.example.testapp.ui.vidgets.NowPlayingPagedListAdapter
 import com.example.testapp.ui.vidgets.NowPlayingPosterDiffUtil
-import com.example.testapp.ui.viewmodel.NowPlayingViewModel
+import com.example.testapp.ui.viewmodel.NowPlayingListViewModel
 import kotlinx.android.synthetic.main.fragment_now_playing_list.*
 import org.koin.android.ext.android.inject
 
 class NowPlayingListFragment : Fragment(), View.OnClickListener {
 
-    private val nowPlayingViewModel: NowPlayingViewModel by inject()
+    private val nowPlayingListViewModel: NowPlayingListViewModel by inject()
     private lateinit var nowPlayingPagedListAdapter: NowPlayingPagedListAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        nowPlayingViewModel.requestInitialData()
+        nowPlayingListViewModel.requestInitialData()
     }
 
     override fun onCreateView(
@@ -39,7 +39,6 @@ class NowPlayingListFragment : Fragment(), View.OnClickListener {
         initView()
         super.onViewCreated(view, savedInstanceState)
     }
-
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -67,7 +66,7 @@ class NowPlayingListFragment : Fragment(), View.OnClickListener {
     }
 
     private fun initSwipeToRefresh() {
-        nowPlayingViewModel.refreshLiveDataState.observe(this, Observer {
+        nowPlayingListViewModel.refreshLiveDataState.observe(this, Observer {
             sl_nowPlaying.isRefreshing = it?.status == Status.PROGRESS
             val msg = it?.throwable
             if (msg != null) {
@@ -75,7 +74,7 @@ class NowPlayingListFragment : Fragment(), View.OnClickListener {
             }
         })
         sl_nowPlaying.setOnRefreshListener {
-            nowPlayingViewModel.refresh()
+            nowPlayingListViewModel.refresh()
         }
     }
 
@@ -84,12 +83,22 @@ class NowPlayingListFragment : Fragment(), View.OnClickListener {
     }
 
     private fun initSubscriptions() {
-        nowPlayingViewModel.pagedListLiveData.observe(this, Observer {
+        nowPlayingListViewModel.pagedListLiveData.observe(this, Observer {
             nowPlayingPagedListAdapter.submitList(it)
         })
     }
 
     override fun onClick(v: View?) {
+        v?.let { openFragment(it.id) }
 
+    }
+
+    private fun openFragment(id: Int){
+        NowPlayingMovieFragment.Param.movieId = id
+
+        activity?.let {
+            it as MainActivity
+            it.replaceFragment(NowPlayingMovieFragment())
+        }
     }
 }

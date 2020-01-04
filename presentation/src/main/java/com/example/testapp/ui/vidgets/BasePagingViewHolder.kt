@@ -4,8 +4,7 @@ import android.view.View
 import androidx.annotation.IdRes
 import androidx.recyclerview.widget.RecyclerView
 
-open class BasePagingViewHolder<Item>(itemView: View,
-                           private val onclickListener: View.OnClickListener?
+open class BasePagingViewHolder<Item>(itemView: View
 ) : RecyclerView.ViewHolder(itemView){
 
     private var item: Item? = null
@@ -18,6 +17,5 @@ open class BasePagingViewHolder<Item>(itemView: View,
 
     open fun bindItem(item: Item?) {
         this.item = item
-        itemView.setOnClickListener(onclickListener)
     }
 }

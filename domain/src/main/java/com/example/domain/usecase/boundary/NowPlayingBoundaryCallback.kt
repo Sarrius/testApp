@@ -1,16 +1,16 @@
-package com.example.domain.usecase
+package com.example.domain.usecase.boundary
 
 import androidx.paging.PagedList
-import com.example.domain.entity.NowPlayingPosterModel
+import com.example.domain.entity.NowPlayingMovieModel
 
 class NowPlayingBoundaryCallback(private val onboundarycallbackListener: BoundaryCallbackListener
-) : PagedList.BoundaryCallback<NowPlayingPosterModel>(){
+) : PagedList.BoundaryCallback<NowPlayingMovieModel>(){
 
     override fun onZeroItemsLoaded() {
         onboundarycallbackListener.onZeroLoaded()
     }
 
-    override fun onItemAtEndLoaded(itemAtEnd: NowPlayingPosterModel) {
+    override fun onItemAtEndLoaded(itemAtEnd: NowPlayingMovieModel) {
         onboundarycallbackListener.onItemAtEndLoaded(itemAtEnd)
     }
 }

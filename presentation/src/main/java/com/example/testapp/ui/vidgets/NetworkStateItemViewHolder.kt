@@ -1,13 +1,13 @@
 package com.example.testapp.ui.vidgets
 
 import android.view.View
-import com.example.domain.entity.NowPlayingPosterModel
+import com.example.domain.entity.NowPlayingMovieModel
 
 class NetworkStateItemViewHolder(
     view: View
-) : BasePagingViewHolder<NowPlayingPosterModel>(view, null) {
+) : BasePagingViewHolder<NowPlayingMovieModel>(view) {
 
-    override fun bindItem(item: NowPlayingPosterModel?) {
+    override fun bindItem(item: NowPlayingMovieModel?) {
 
         //TODO leaving this viewholder as it is
         //this is just demo app, ok?

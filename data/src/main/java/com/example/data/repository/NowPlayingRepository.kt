@@ -24,8 +24,9 @@ class NowPlayingRepository(
        return getPagingSingle(page, false)
     }
 
-    fun getNowPlayingById(id: Int) {
-
+    fun getNowPlayingById(id: Int): Single<MovieDbModel> {
+        return nowPlayingDbDataSource.getNowPlayingById(id)
+            .subscribeOn(Schedulers.io())
     }
 
     //here is the only place for entity mapping

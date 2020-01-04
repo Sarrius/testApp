@@ -6,13 +6,13 @@ import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.example.domain.entity.NetworkState
-import com.example.domain.entity.NowPlayingPosterModel
+import com.example.domain.entity.NowPlayingMovieModel
 import com.example.testapp.R
 
 class NowPlayingPagedListAdapter(
-    diffUtilCallback: DiffUtil.ItemCallback<NowPlayingPosterModel>,
+    diffUtilCallback: DiffUtil.ItemCallback<NowPlayingMovieModel>,
     private val onClickListener: View.OnClickListener
-) : PagedListAdapter<NowPlayingPosterModel, BasePagingViewHolder<NowPlayingPosterModel>>(diffUtilCallback) {
+) : PagedListAdapter<NowPlayingMovieModel, BasePagingViewHolder<NowPlayingMovieModel>>(diffUtilCallback) {
 
     private var networkState: NetworkState? = null
 
@@ -22,7 +22,7 @@ class NowPlayingPagedListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int
-    ): BasePagingViewHolder<NowPlayingPosterModel> {
+    ): BasePagingViewHolder<NowPlayingMovieModel> {
         if (viewType == TYPE_PROGRESS) {
             return NetworkStateItemViewHolder(
                 LayoutInflater.from(parent.context)
@@ -44,7 +44,7 @@ class NowPlayingPagedListAdapter(
         )
     }
 
-    override fun onBindViewHolder(holder: BasePagingViewHolder<NowPlayingPosterModel>, position: Int) {
+    override fun onBindViewHolder(holder: BasePagingViewHolder<NowPlayingMovieModel>, position: Int) {
         holder.bindItem(getItem(position))
     }
 

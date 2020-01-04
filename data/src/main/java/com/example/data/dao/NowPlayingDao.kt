@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
 import com.example.data.model.MovieDbModel
+import io.reactivex.Single
 import timber.log.Timber
 
 @Dao
@@ -25,6 +26,9 @@ abstract class NowPlayingDao {
 
     @Query("DELETE FROM MovieDbModel")
     abstract fun removeAllNowPlaying()
+
+    @Query("SELECT * FROM MovieDbModel WHERE id=:id")
+    abstract fun getNowPlayingById(id: Int): Single<MovieDbModel>
 
     fun insertAllNowPlaying(nowPlaying: List<MovieDbModel>, rewrite: Boolean) {
         if (nowPlaying.isEmpty()) return
@@ -46,4 +50,5 @@ abstract class NowPlayingDao {
             child
         }
     }
+
 }

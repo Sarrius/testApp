@@ -1,6 +1,6 @@
-package com.example.data.repository
+package com.example.domain.usecase
 
-import com.example.data.model.NowPlayingPosterModel
+import com.example.domain.entity.NowPlayingPosterModel
 
 interface BoundaryCallbackListener {
 

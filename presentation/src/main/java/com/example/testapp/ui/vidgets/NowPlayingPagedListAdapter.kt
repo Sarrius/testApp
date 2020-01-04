@@ -6,10 +6,8 @@ import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.example.domain.entity.NetworkState
-import com.example.domain.entity.NowPlayingPosterExtendedModel
 import com.example.domain.entity.NowPlayingPosterModel
 import com.example.testapp.R
-import com.example.testapp.ui.viewmodel.NowPlayingViewModel
 
 class NowPlayingPagedListAdapter(
     diffUtilCallback: DiffUtil.ItemCallback<NowPlayingPosterModel>,

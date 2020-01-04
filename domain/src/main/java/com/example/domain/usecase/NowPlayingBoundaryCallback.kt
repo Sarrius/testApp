@@ -1,9 +1,10 @@
-package com.example.data.repository
+package com.example.domain.usecase
 
 import androidx.paging.PagedList
-import com.example.data.model.NowPlayingPosterModel
+import com.example.domain.entity.NowPlayingPosterModel
 
-class NowPlayingBoundaryCallback(private val onboundarycallbackListener: BoundaryCallbackListener) : PagedList.BoundaryCallback<NowPlayingPosterModel>(){
+class NowPlayingBoundaryCallback(private val onboundarycallbackListener: BoundaryCallbackListener
+) : PagedList.BoundaryCallback<NowPlayingPosterModel>(){
 
     override fun onZeroItemsLoaded() {
         onboundarycallbackListener.onZeroLoaded()

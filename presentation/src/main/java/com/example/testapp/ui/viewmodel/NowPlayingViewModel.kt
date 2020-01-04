@@ -9,17 +9,20 @@ import org.koin.core.inject
 
 class NowPlayingViewModel : ViewModel(), KoinComponent{
 
+
     private val nowPlayingUseCase: NowPlayingUseCase by inject()
 
-    val refreshLiveData = MutableLiveData<NetworkState>()
-    val initialLiveDate = MutableLiveData<NetworkState>()
+    val refreshLiveDataState = MutableLiveData<NetworkState>()
+    val initialLiveDataState = MutableLiveData<NetworkState>()
+
+    val pagedListLiveData = nowPlayingUseCase.requestListData()
 
     fun requestInitialData() {
-        nowPlayingUseCase.getNowPlayingPaged(null, initialLiveDate)
+        nowPlayingUseCase.getNowPlayingPaged(null, initialLiveDataState)
     }
 
     fun refresh(){
-        nowPlayingUseCase.refresh(refreshLiveData)
+        nowPlayingUseCase.refresh(refreshLiveDataState)
     }
 
 }

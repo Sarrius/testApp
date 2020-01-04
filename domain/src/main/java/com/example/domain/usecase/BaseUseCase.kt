@@ -20,10 +20,10 @@ open abstract class BaseUseCase(private vararg val repos: BaseRepo) {
     }
 }
 
-fun <T> Single<T>.handleState(networkState: MutableLiveData<NetworkState>): Disposable {
+fun <T> Single<T>.handleState(networkState: MutableLiveData<NetworkState>?): Disposable {
     return this.subscribe({
-        networkState.postValue(NetworkState.SUCCESS)
+        networkState?.postValue(NetworkState.SUCCESS)
     }, {
-        networkState.postValue(NetworkState.error(it))
+        networkState?.postValue(NetworkState.error(it))
     })
 }

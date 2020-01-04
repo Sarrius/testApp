@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.domain.entity.Status
 import com.example.testapp.R
 import com.example.testapp.ui.vidgets.NowPlayingPagedListAdapter
 import com.example.testapp.ui.vidgets.NowPlayingPosterDiffUtil
@@ -34,8 +36,19 @@ class NowPlayingListFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initList()
+        initView()
         super.onViewCreated(view, savedInstanceState)
+    }
+
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        initSubscriptions()
+    }
+
+    private fun initView() {
+        initList()
+        initSwipeToRefresh()
     }
 
     private fun initList() {
@@ -44,13 +57,36 @@ class NowPlayingListFragment : Fragment(), View.OnClickListener {
             this
         )
 
-        rv_now_playing.adapter = nowPlayingPagedListAdapter
-        rv_now_playing.layoutManager = GridLayoutManager(
+        rv_nowPlaying.adapter = nowPlayingPagedListAdapter
+        rv_nowPlaying.layoutManager = GridLayoutManager(
             context,
             2,
             RecyclerView.VERTICAL,
             false
         )
+    }
+
+    private fun initSwipeToRefresh() {
+        nowPlayingViewModel.refreshLiveDataState.observe(this, Observer {
+            sl_nowPlaying.isRefreshing = it?.status == Status.PROGRESS
+            val msg = it?.throwable
+            if (msg != null) {
+                showError(msg)
+            }
+        })
+        sl_nowPlaying.setOnRefreshListener {
+            nowPlayingViewModel.refresh()
+        }
+    }
+
+    private fun showError(msg: Throwable) {
+
+    }
+
+    private fun initSubscriptions() {
+        nowPlayingViewModel.pagedListLiveData.observe(this, Observer {
+            nowPlayingPagedListAdapter.submitList(it)
+        })
     }
 
     override fun onClick(v: View?) {

@@ -11,10 +11,12 @@ class NowPlayingViewHolder(
     onclickListener: View.OnClickListener
 ): BasePagingViewHolder<NowPlayingPosterModel>(itemView, onclickListener){
 
-    val poster: ImageView = bindLazy(R.id.iv_poster)
+    private val poster: ImageView = bindLazy(R.id.iv_poster)
 
     override fun bindItem(item: NowPlayingPosterModel?) {
         super.bindItem(item)
-        poster.loadImage(item?.posterPath, R.drawable.ic_no_image)
+        poster.loadImage(item?.posterPath,
+            android.R.drawable.progress_indeterminate_horizontal,
+            50)//TODO hardcoded rounding
     }
 }

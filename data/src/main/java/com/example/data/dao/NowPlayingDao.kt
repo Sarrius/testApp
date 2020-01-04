@@ -20,10 +20,11 @@ abstract class NowPlayingDao {
     @Query("SELECT COUNT(*) FROM MovieDbModel")
     abstract fun getNextIndexInNowPlaying(): Int
 
+    @Query("SELECT MAX(nextPage) FROM MovieDbModel")
+    abstract fun getNexPage(): Int
+
     @Query("DELETE FROM MovieDbModel")
     abstract fun removeAllNowPlaying()
-
-
 
     fun insertAllNowPlaying(nowPlaying: List<MovieDbModel>, rewrite: Boolean) {
         if (nowPlaying.isEmpty()) return
@@ -38,8 +39,10 @@ abstract class NowPlayingDao {
 
     private fun indexedItems(nowPlaying: List<MovieDbModel>): List<MovieDbModel> {
         val start = getNextIndexInNowPlaying()
+        val nextPage = getNexPage()+1
         return nowPlaying.mapIndexed { index, child ->
             child.indexInResponse = start + index
+            child.nextPage = nextPage
             child
         }
     }

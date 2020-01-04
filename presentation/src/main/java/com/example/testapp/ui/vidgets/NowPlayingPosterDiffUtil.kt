@@ -1,7 +1,6 @@
 package com.example.testapp.ui.vidgets
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.domain.entity.NowPlayingPosterExtendedModel
 import com.example.domain.entity.NowPlayingPosterModel
 
 class NowPlayingPosterDiffUtil: DiffUtil.ItemCallback<NowPlayingPosterModel>(){

@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.example.common.utils.loadImage
+import com.example.common.utils.reformatDate
+import com.example.common.utils.loadPoster
 import com.example.testapp.R
 import com.example.testapp.ui.viewmodel.NowPlayingMovieViewModel
 import kotlinx.android.synthetic.main.fragment_now_playing_movie.*
@@ -23,6 +25,7 @@ class NowPlayingMovieFragment : Fragment() {
         nowPlayingMovieViewModel.requestMovieData(Param.movieId)
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,26 +37,24 @@ class NowPlayingMovieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initSubscriptions()
-        initView()
     }
+
 
     private fun initSubscriptions() {
         nowPlayingMovieViewModel.movieLiveData.observe(this, Observer {
-            iv_poster.loadImage(
+            iv_poster.loadPoster(
                     it?.posterPath,
             R.drawable.ic_no_image,
             50)//TODO hardcoded rounding
 
             tv_scoreValue.text = it.voteAverage.toString()
             tv_ratingValue.text = "N/A"//TODO
-            tv_releaseDate.text = it.releaseDate
+            tv_releaseDateValue.text = it.releaseDate?.reformatDate()
             tv_movieName.text = it.title
             tv_movieDescription.text = it.overview
         })
 
     }
 
-    private fun initView() {
 
-    }
 }

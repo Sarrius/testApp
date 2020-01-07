@@ -1,6 +1,6 @@
 package com.example.remote
 
-import com.example.common.utils.ServiceUtil
+import com.example.common.utils.ApiServiceUtil
 import com.example.remote.interceptors.QueryParamInterceptor
 import com.example.remote.managers.MovieApiManager
 import com.example.remote.service.MoviesService
@@ -27,7 +27,7 @@ object ApiModule : KoinComponent {
     }
 
     fun provideService(): MoviesService {
-        return ServiceUtil.buildRetrofit(
+        return ApiServiceUtil.buildRetrofit(
             "http://api.themoviedb.org/3/", //TODO hardcoded url
             MoviesService::class.java,
             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY),

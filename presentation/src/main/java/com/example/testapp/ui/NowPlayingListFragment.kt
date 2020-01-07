@@ -16,6 +16,7 @@ import com.example.testapp.ui.viewmodel.NowPlayingListViewModel
 import kotlinx.android.synthetic.main.fragment_now_playing_list.*
 import org.koin.android.ext.android.inject
 
+
 class NowPlayingListFragment : Fragment(), View.OnClickListener {
 
     private val nowPlayingListViewModel: NowPlayingListViewModel by inject()

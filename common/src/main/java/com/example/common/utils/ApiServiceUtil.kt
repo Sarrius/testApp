@@ -8,7 +8,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-object ServiceUtil {
+object ApiServiceUtil {
 
     fun <T> buildRetrofit(url: String,
                           clazz: Class<T>,
@@ -22,7 +22,7 @@ object ServiceUtil {
             .create(clazz)
     }
 
-    fun getOkHttpClient(vararg interceptors: Interceptor?): OkHttpClient {
+    private fun getOkHttpClient(vararg interceptors: Interceptor?): OkHttpClient {
         val builder = OkHttpClient.Builder()
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(20, TimeUnit.SECONDS)

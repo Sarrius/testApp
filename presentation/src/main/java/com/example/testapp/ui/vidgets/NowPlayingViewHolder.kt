@@ -2,7 +2,7 @@ package com.example.testapp.ui.vidgets
 
 import android.view.View
 import android.widget.ImageView
-import com.example.common.utils.loadImage
+import com.example.common.utils.loadPoster
 import com.example.domain.entity.NowPlayingMovieModel
 import com.example.testapp.R
 
@@ -20,9 +20,9 @@ class NowPlayingViewHolder(
                 onclickListener.onClick(view)
             }
         }
-        poster.loadImage(
+        poster.loadPoster(
             item?.posterPath,
             R.drawable.ic_no_image,
-            50)//TODO hardcoded rounding
+            50)//TODO hardcoded rounding and some image as placeholder
     }
 }

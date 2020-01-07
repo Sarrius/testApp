@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="poster_small_height">320dp</dimen>
+    <dimen name="poster_small_width">180dp</dimen>
+
+    <dimen name="poster_medium_height">288dp</dimen>
+    <dimen name="poster_medium_width">192dp</dimen>
+
+    <dimen name="text_size_max">24sp</dimen>
+    <dimen name="text_size_big">22sp</dimen>
+    <dimen name="text_size_mid">18sp</dimen>
+    <dimen name="text_size_small">141sp</dimen>
+
+    <dimen name="padding_base">10dp</dimen>
+    <dimen name="padding_small">6dp</dimen>
+    <dimen name="list_item_height">288dp</dimen>
+
+</resources>

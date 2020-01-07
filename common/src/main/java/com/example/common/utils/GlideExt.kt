@@ -5,11 +5,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.example.common.R
 
 
-fun ImageView.loadImage(imgPath: String?, placeholderId: Int?, roundingRadius: Int) {
+fun ImageView.loadPoster(imgPath: String?, placeholderId: Int?, roundingRadius: Int) {
 
-    //TODO harcoded url
+    //TODO harcoded base url
     //img size w154
     val imgUrl = "http://image.tmdb.org/t/p/w342$imgPath"
 
@@ -17,7 +18,12 @@ fun ImageView.loadImage(imgPath: String?, placeholderId: Int?, roundingRadius: I
         .asBitmap()
         .load(imgUrl)
         .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-        .apply(RequestOptions().transform(RoundedCorners(roundingRadius)))
+        .apply(RequestOptions().apply{
+            transform(RoundedCorners(roundingRadius))
+//            override(
+//                ScreenUtils.convertDpToPixel(context.resources.getDimension(R.dimen.poster_height), context).toInt(),
+//                ScreenUtils.convertDpToPixel(context.resources.getDimension(R.dimen.poster_width), context).toInt())
+        })
         .apply {
             placeholderId?.let {
                 placeholder(it)

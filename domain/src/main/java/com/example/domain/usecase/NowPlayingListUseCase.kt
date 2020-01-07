@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import com.example.common.utils.Constants
+import com.example.domain.entity.Listing
 import com.example.data.repository.NowPlayingRepository
 import com.example.domain.entity.NetworkState
 import com.example.domain.entity.NowPlayingMovieModel
@@ -14,35 +16,42 @@ import mapToEntity
 
 class NowPlayingListUseCase(
     private val nowPlayingRepository: NowPlayingRepository
-): BaseUseCase(nowPlayingRepository), BoundaryCallbackListener {
+) : BaseUseCase(nowPlayingRepository), BoundaryCallbackListener {
 
-    fun refresh(networkState: MutableLiveData<NetworkState>){
+    fun refresh(networkState: MutableLiveData<NetworkState>) {
+        networkState.value = NetworkState.PROGRESS
         nowPlayingRepository.refresh()
             .handleNetworkState(networkState)
             .addTo(compositeDisposable)
     }
 
-    fun getNowPlayingPaged(page: Int?, networkState: MutableLiveData<NetworkState>){
-        nowPlayingRepository.getNowPlayingPaged(page)
+    fun requestInitial(networkState: MutableLiveData<NetworkState>) {
+        networkState.value = NetworkState.PROGRESS
+        nowPlayingRepository.getNowPlayingPaged(null)
             .handleNetworkState(networkState)
             .addTo(compositeDisposable)
     }
 
-    fun requestListData(): LiveData<PagedList<NowPlayingMovieModel>> {
+    fun requestListData(nextPageState: MutableLiveData<NetworkState>): LiveData<PagedList<NowPlayingMovieModel>> {
         return LivePagedListBuilder(
             nowPlayingRepository.requestListData().map { it.mapToEntity() }
-            , 20
-        ).setBoundaryCallback(NowPlayingBoundaryCallback(this))
-            .build() //TODO nextPage size configurable val
+            , Constants.pageSize
+        ).setBoundaryCallback(
+            NowPlayingBoundaryCallback(
+                nextPageState,
+                this
+            )
+        ).build()
     }
 
-    override fun onZeroLoaded() {
+    override fun onZeroLoaded() {}//TODO
 
-    }
-
-    override fun onItemAtEndLoaded(itemAtEnd: NowPlayingMovieModel) {
+    override fun onItemAtEndLoaded(
+        itemAtEnd: NowPlayingMovieModel,
+        networkState: MutableLiveData<NetworkState>
+    ) {
         nowPlayingRepository.getNowPlayingPaged(itemAtEnd.nextPage)
-            .handleNetworkState(null)
+            .handleNetworkState(networkState)
             .addTo(compositeDisposable)
     }
 }

@@ -11,6 +11,7 @@ open abstract class BaseUseCase(private vararg val repos: BaseRepo) {
 
     protected val compositeDisposable = CompositeDisposable()
 
+    //TODO do not forget to implement
     fun dispose() {
         if (!compositeDisposable.isDisposed) {
             compositeDisposable.dispose()

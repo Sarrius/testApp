@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.domain.entity.NetworkState
 import com.example.domain.entity.Status
 import com.example.testapp.R
 import com.example.testapp.ui.vidgets.NowPlayingPagedListAdapter
@@ -22,12 +24,6 @@ class NowPlayingListFragment : Fragment(), View.OnClickListener {
     private val nowPlayingListViewModel: NowPlayingListViewModel by inject()
     private lateinit var nowPlayingPagedListAdapter: NowPlayingPagedListAdapter
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        nowPlayingListViewModel.requestInitialData()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,6 +33,7 @@ class NowPlayingListFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        initInitialData()
         initView()
         super.onViewCreated(view, savedInstanceState)
     }
@@ -66,6 +63,15 @@ class NowPlayingListFragment : Fragment(), View.OnClickListener {
         )
     }
 
+
+    private fun initInitialData() {
+        nowPlayingListViewModel.initialLiveDataState.observe(this, Observer {
+            handleNetworkState(it)
+        })
+        nowPlayingListViewModel.requestInitialData()
+    }
+
+
     private fun initSwipeToRefresh() {
         nowPlayingListViewModel.refreshLiveDataState.observe(this, Observer {
             sl_nowPlaying.isRefreshing = it?.status == Status.PROGRESS
@@ -79,22 +85,42 @@ class NowPlayingListFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun showError(msg: Throwable) {
-
+    private fun showError(error: Throwable) {
+        Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
     }
 
     private fun initSubscriptions() {
-        nowPlayingListViewModel.pagedListLiveData.observe(this, Observer {
-            nowPlayingPagedListAdapter.submitList(it)
-        })
+        nowPlayingListViewModel.apply {
+            pagedListLiveData.observe(this@NowPlayingListFragment, Observer {pagedList ->
+                nowPlayingPagedListAdapter.submitList(pagedList)
+                nextPageState.observe(this@NowPlayingListFragment, Observer { nextPageState ->
+                    nowPlayingPagedListAdapter.setNetworkState(nextPageState)
+                })
+            })
+        }
+    }
+
+    private fun handleNetworkState(networkState: NetworkState) {
+        when (networkState.status) {
+            Status.PROGRESS -> handleProgress(true)
+            Status.FAILED -> {
+                handleProgress(true)
+                networkState.throwable?.let { error -> showError(error) }
+            }
+            Status.SUCCESS -> handleProgress(false)
+        }
+    }
+
+    private fun handleProgress(show: Boolean) {
+        progressBar.visibility = if (show) View.VISIBLE else View.GONE
+        rlProgress.visibility = if (show) View.GONE else View.VISIBLE
     }
 
     override fun onClick(v: View?) {
         v?.let { openFragment(it.id) }
-
     }
 
-    private fun openFragment(id: Int){
+    private fun openFragment(id: Int) {
         NowPlayingMovieFragment.Param.movieId = id
 
         activity?.let {

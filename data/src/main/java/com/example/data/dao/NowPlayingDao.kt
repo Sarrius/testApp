@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
+import com.example.common.utils.Constants
 import com.example.data.model.MovieDbModel
 import io.reactivex.Single
 import timber.log.Timber
@@ -16,12 +17,12 @@ abstract class NowPlayingDao {
     abstract fun insertNowPlaying(nowPlaying: List<MovieDbModel>)
 
     @Query("SELECT * FROM MovieDbModel ORDER BY indexInResponse ASC")
-    abstract fun getNowPlayingByPage(): DataSource.Factory<Int, MovieDbModel>
+    abstract fun getNowPlaying(): DataSource.Factory<Int, MovieDbModel>
 
     @Query("SELECT COUNT(*) FROM MovieDbModel")
     abstract fun getNextIndexInNowPlaying(): Int
 
-    @Query("SELECT MAX(nextPage) FROM MovieDbModel")
+    @Query("SELECT MAX(nextPage) FROM MovieDbModel ORDER BY indexInResponse ASC")
     abstract fun getNexPage(): Int
 
     @Query("DELETE FROM MovieDbModel")
@@ -33,7 +34,7 @@ abstract class NowPlayingDao {
     fun insertAllNowPlaying(nowPlaying: List<MovieDbModel>, rewrite: Boolean) {
         if (nowPlaying.isEmpty()) return
         try {
-            if(rewrite)removeAllNowPlaying()
+            if(rewrite){removeAllNowPlaying()}
             insertNowPlaying(indexedItems(nowPlaying))
         } catch (exception: Exception) {
             Timber.e(exception)
@@ -43,10 +44,16 @@ abstract class NowPlayingDao {
 
     private fun indexedItems(nowPlaying: List<MovieDbModel>): List<MovieDbModel> {
         val start = getNextIndexInNowPlaying()
-        val nextPage = getNexPage()+1
+        var nextPage = (start + Constants.pageSize - 1) / Constants.pageSize
+
+        Timber.d("nextPage = $nextPage")
+
         return nowPlaying.mapIndexed { index, child ->
-            child.indexInResponse = start + index
-            child.nextPage = nextPage
+            val indxInResp = start + index
+            child.indexInResponse = indxInResp
+            Timber.d("indexInResponse = $indxInResp")
+
+            child.nextPage = nextPage + 1
             child
         }
     }

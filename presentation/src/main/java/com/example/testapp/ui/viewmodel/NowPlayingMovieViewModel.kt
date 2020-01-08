@@ -16,4 +16,9 @@ class NowPlayingMovieViewModel : ViewModel(), KoinComponent {
     fun requestMovieData(id: Int){
         nowPlayingListUseCase.getNowPlayingById(id, movieLiveData)
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        nowPlayingListUseCase.dispose()
+    }
 }

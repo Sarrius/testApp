@@ -30,7 +30,7 @@ object ApiModule : KoinComponent {
         return ApiServiceUtil.buildRetrofit(
             "http://api.themoviedb.org/3/", //TODO hardcoded url
             MoviesService::class.java,
-            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY),
+//            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY),
             QueryParamInterceptor(HashMap<String, String>().apply {
                 put("api_key", "1f71bb7ac9eb935e91dad65b12b18354")
             }))//TODO hardcoded query params

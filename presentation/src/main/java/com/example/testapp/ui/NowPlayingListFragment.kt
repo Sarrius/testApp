@@ -1,5 +1,6 @@
 package com.example.testapp.ui
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -44,11 +45,11 @@ class NowPlayingListFragment : Fragment(), View.OnClickListener {
     }
 
     private fun initView() {
-        initList()
+        initList(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
         initSwipeToRefresh()
     }
 
-    private fun initList() {
+    private fun initList(isPortrait: Boolean) {
         nowPlayingPagedListAdapter = NowPlayingPagedListAdapter(
             NowPlayingPosterDiffUtil(),
             this
@@ -57,7 +58,7 @@ class NowPlayingListFragment : Fragment(), View.OnClickListener {
         rv_nowPlaying.adapter = nowPlayingPagedListAdapter
         rv_nowPlaying.layoutManager = GridLayoutManager(
             context,
-            2,
+            if(isPortrait)2 else 3,
             RecyclerView.VERTICAL,
             false
         )
@@ -68,7 +69,6 @@ class NowPlayingListFragment : Fragment(), View.OnClickListener {
         nowPlayingListViewModel.initialLiveDataState.observe(this, Observer {
             handleNetworkState(it)
         })
-        nowPlayingListViewModel.requestInitialData()
     }
 
 

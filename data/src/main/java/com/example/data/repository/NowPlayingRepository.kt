@@ -1,27 +1,34 @@
 package com.example.data.repository
 
+import android.util.Log
 import androidx.paging.DataSource
 import com.example.data.model.MovieDbModel
 import com.example.data.repository.datasource.api.NowPlayingApiDataSource
 import com.example.data.repository.datasource.local.NowPlayingDbDataSource
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 
 class NowPlayingRepository(
     private val nowPlayingApiDataSource: NowPlayingApiDataSource,
     private val nowPlayingDbDataSource: NowPlayingDbDataSource
 ) : BaseRepo() {
 
+
+
     override fun requestInitialData(): Single<Unit> {
+        Timber.log(Log.DEBUG, "requestInitialData")
         return getPagingSingle(null, true)
     }
 
     override fun refresh(): Single<Unit> {
+        Timber.log(Log.DEBUG, "refresh")
         return getPagingSingle(null, true)
     }
 
     fun getNowPlayingPaged(page: Int?): Single<Unit> {
-       return getPagingSingle(page, false)
+        Timber.log(Log.DEBUG, "getNowPlayingPaged")
+        return getPagingSingle(page, false)
     }
 
     fun getNowPlayingById(id: Int): Single<MovieDbModel> {
@@ -31,6 +38,8 @@ class NowPlayingRepository(
 
     //here is the only place for entity mapping
     fun requestListData(): DataSource.Factory<Int, MovieDbModel> {
+        Timber.log(Log.DEBUG, "requestListData")
+
         return nowPlayingDbDataSource.getNowPlaying()
     }
 
@@ -38,10 +47,14 @@ class NowPlayingRepository(
         return nowPlayingApiDataSource.getNowPlaying(page)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())
-            .map{ writeItemsIntoDb(it, rewrite) }
+            .map{
+                writeItemsIntoDb(it, rewrite)
+
+            }
     }
 
     private fun writeItemsIntoDb(nowPlayingList: List<MovieDbModel>, rewrite: Boolean){
-        database.nowPlayingDao().insertAllNowPlaying(nowPlayingList, rewrite)
+        Timber.d("writeItemsIntoDb = $nowPlayingList")
+            database.nowPlayingDao().insertAllNowPlaying(nowPlayingList, rewrite)
     }
 }

@@ -16,11 +16,7 @@ class NowPlayingListViewModel : ViewModel(), KoinComponent {
     val refreshLiveDataState = MutableLiveData<NetworkState>()
     val initialLiveDataState = MutableLiveData<NetworkState>()
     val nextPageState = MutableLiveData<NetworkState>()
-    var pagedListLiveData = nowPlayingListUseCase.requestListData(nextPageState)
-
-    fun requestInitialData() {
-        nowPlayingListUseCase.requestInitial(initialLiveDataState)
-    }
+    var pagedListLiveData = nowPlayingListUseCase.requestListData(nextPageState, initialLiveDataState)
 
     fun refresh() {
         nowPlayingListUseCase.refresh(refreshLiveDataState)

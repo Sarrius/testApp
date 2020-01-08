@@ -6,7 +6,7 @@ import com.example.domain.entity.NowPlayingMovieModel
 
 interface BoundaryCallbackListener {
 
-    fun onZeroLoaded()
+    fun onZeroLoaded(networkState: MutableLiveData<NetworkState>)
     fun onItemAtEndLoaded(itemAtEnd: NowPlayingMovieModel,
                           networkState: MutableLiveData<NetworkState>)
 }

@@ -1,5 +1,6 @@
 package com.example.domain.usecase
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.LivePagedListBuilder
@@ -13,6 +14,7 @@ import com.example.domain.usecase.boundary.BoundaryCallbackListener
 import com.example.domain.usecase.boundary.NowPlayingBoundaryCallback
 import io.reactivex.rxkotlin.addTo
 import mapToEntity
+import timber.log.Timber
 
 class NowPlayingListUseCase(
     private val nowPlayingRepository: NowPlayingRepository
@@ -25,31 +27,39 @@ class NowPlayingListUseCase(
             .addTo(compositeDisposable)
     }
 
-    fun requestInitial(networkState: MutableLiveData<NetworkState>) {
-        networkState.value = NetworkState.PROGRESS
-        nowPlayingRepository.getNowPlayingPaged(null)
-            .handleNetworkState(networkState)
-            .addTo(compositeDisposable)
-    }
-
-    fun requestListData(nextPageState: MutableLiveData<NetworkState>): LiveData<PagedList<NowPlayingMovieModel>> {
+    fun requestListData(nextPageState: MutableLiveData<NetworkState>,
+                        initialLiveDataState: MutableLiveData<NetworkState>
+    ): LiveData<PagedList<NowPlayingMovieModel>> {
         return LivePagedListBuilder(
             nowPlayingRepository.requestListData().map { it.mapToEntity() }
             , Constants.pageSize
         ).setBoundaryCallback(
             NowPlayingBoundaryCallback(
+                initialLiveDataState,
                 nextPageState,
                 this
             )
         ).build()
     }
 
-    override fun onZeroLoaded() {}//TODO
+    override fun onZeroLoaded(
+        networkState: MutableLiveData<NetworkState>
+    ) {
+        Timber.log(Log.DEBUG, "onZeroLoaded")
+
+        networkState.value = NetworkState.PROGRESS
+        nowPlayingRepository.getNowPlayingPaged(null)
+            .handleNetworkState(networkState)
+            .addTo(compositeDisposable)
+    }
 
     override fun onItemAtEndLoaded(
         itemAtEnd: NowPlayingMovieModel,
         networkState: MutableLiveData<NetworkState>
     ) {
+        Timber.log(Log.DEBUG, "***************onItemAtEndLoaded*********")
+        Timber.log(Log.DEBUG, "itemAtEnd " + itemAtEnd.id)
+
         nowPlayingRepository.getNowPlayingPaged(itemAtEnd.nextPage)
             .handleNetworkState(networkState)
             .addTo(compositeDisposable)

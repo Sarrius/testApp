@@ -1,5 +1,6 @@
 package com.example.data.dao
 
+import android.util.Log
 import androidx.paging.DataSource
 import androidx.room.Dao
 import androidx.room.Insert
@@ -19,7 +20,7 @@ abstract class NowPlayingDao {
     @Query("SELECT * FROM MovieDbModel ORDER BY indexInResponse ASC")
     abstract fun getNowPlaying(): DataSource.Factory<Int, MovieDbModel>
 
-    @Query("SELECT COUNT(*) FROM MovieDbModel")
+    @Query("SELECT COUNT(indexInResponse) + 1  FROM MovieDbModel")
     abstract fun getNextIndexInNowPlaying(): Int
 
     @Query("SELECT MAX(nextPage) FROM MovieDbModel ORDER BY indexInResponse ASC")
@@ -34,7 +35,7 @@ abstract class NowPlayingDao {
     fun insertAllNowPlaying(nowPlaying: List<MovieDbModel>, rewrite: Boolean) {
         if (nowPlaying.isEmpty()) return
         try {
-            if(rewrite){removeAllNowPlaying()}
+            if(rewrite){ removeAllNowPlaying() }
             insertNowPlaying(indexedItems(nowPlaying))
         } catch (exception: Exception) {
             Timber.e(exception)
@@ -44,15 +45,15 @@ abstract class NowPlayingDao {
 
     private fun indexedItems(nowPlaying: List<MovieDbModel>): List<MovieDbModel> {
         val start = getNextIndexInNowPlaying()
-        var nextPage = (start + Constants.pageSize - 1) / Constants.pageSize
+        Timber.log(Log.DEBUG, "start = $start")
+        val nextPage = (start + Constants.pageSize - 1) / Constants.pageSize
 
-        Timber.d("nextPage = $nextPage")
+        Timber.log(Log.DEBUG, "nextPage = $nextPage")
 
         return nowPlaying.mapIndexed { index, child ->
             val indxInResp = start + index
             child.indexInResponse = indxInResp
             Timber.d("indexInResponse = $indxInResp")
-
             child.nextPage = nextPage + 1
             child
         }
